@@ -70,6 +70,7 @@ public class RtmpConnectConfig extends AbstractTestElement
 	}
 	@Override
 	public void testEnded() {
+		System.out.println("test end...");
 		// テストが終了したときによけいなコネクションがのこっている場合はすべて破棄する。
 		for(Entry<Thread, RtmpData> entry : rtmpData.entrySet()) {
 			try {

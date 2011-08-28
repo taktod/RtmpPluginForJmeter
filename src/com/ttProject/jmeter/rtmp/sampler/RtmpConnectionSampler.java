@@ -1,8 +1,5 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -17,7 +14,6 @@ import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 
-@SuppressWarnings("unused")
 public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	/** serialID */
 	private static final long serialVersionUID = -3395716901195949497L;
@@ -25,22 +21,22 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	private boolean perThread;
 	private String variableName = null;
 	
-//	private RtmpConnectConfig rtmpConnectConfig = null;
-//	private String connectCode;
+	private RtmpConnectConfig rtmpConnectConfig = null;
+	private String connectCode;
 	@Override
 	public SampleResult sample(Entry arg0) {
 		SampleResult result = new SampleResult();
-//		if(!preCheck(result)) {
-//			return result;
-//		}
-//		doConnect(result);
+		if(!preCheck(result)) {
+			return result;
+		}
+		doConnect(result);
 		result.setSampleLabel("test");
 		result.setSuccessful(true);
 		return result;
 	}
 	
 	// - 実処理 -------------- //
-/*	private void setupResult(SampleResult result, String reason, boolean success) {
+	private void setupResult(SampleResult result, String reason, boolean success) {
 		result.sampleEnd();
 		StringBuilder str = new StringBuilder();
 		str.append(getName());
@@ -75,12 +71,18 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	}
 	private void doConnect(SampleResult result) {
 		result.sampleStart();
-/*		RtmpClientEx rtmpClient = new RtmpClientEx(
+		RtmpClientEx rtmpClient = new RtmpClientEx(
 				rtmpConnectConfig.getServer(),
 				rtmpConnectConfig.getPort(),
 				rtmpConnectConfig.getApplication(),
-				new ConnectEvent(Thread.currentThread()));* /
-		setupResult(result, "ok", true);
+				new ConnectEvent(Thread.currentThread()));
+		rtmpClient.connect();
+		try {
+			Thread.sleep(10000);
+		}
+		catch (Exception e) {
+		}
+		setupResult(result, connectCode, true);
 	}
 	private class ConnectEvent implements IRtmpClientEx {
 		private Thread t;
