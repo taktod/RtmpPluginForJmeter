@@ -13,6 +13,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 import com.ttProject.jmeter.rtmp.RtmpData;
+import com.ttProject.junit.annotation.Init;
 
 public class RtmpConnectConfig extends AbstractTestElement 
 	implements TestBean, ConfigElement, TestListener {
@@ -32,6 +33,19 @@ public class RtmpConnectConfig extends AbstractTestElement
 	private String application = null;
 
 	public RtmpConnectConfig() {
+		rtmpData = new ConcurrentHashMap<Thread, RtmpData>();
+	}
+	@SuppressWarnings("unused")
+	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat", "http://localhost/test.html", "http://localhost/test.swf"})
+	private RtmpConnectConfig(
+			String variableName,
+			String rtmpUrl,
+			String pageUrl,
+			String swfUrl) {
+		setVariableName(variableName);
+		setRtmpUrl(rtmpUrl);
+		setPageUrl(pageUrl);
+		setSwfUrl(swfUrl);
 		rtmpData = new ConcurrentHashMap<Thread, RtmpData>();
 	}
 	public boolean isValid() {

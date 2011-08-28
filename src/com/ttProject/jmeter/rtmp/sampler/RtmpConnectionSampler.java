@@ -13,6 +13,9 @@ import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
+import com.ttProject.junit.annotation.Init;
+import com.ttProject.junit.annotation.Junit;
+import com.ttProject.junit.annotation.Test;
 
 public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	/** serialID */
@@ -23,20 +26,37 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	
 	private RtmpConnectConfig rtmpConnectConfig = null;
 	private String connectCode;
+	/**
+	 * 通常のコンストラクタ
+	 */
+	public RtmpConnectionSampler() {
+	}
+	/**
+	 * {@inheritDoc}
+	 * @param entry
+	 * @return
+	 */
 	@Override
-	public SampleResult sample(Entry arg0) {
+	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
+		// 動作前確認
 		if(!preCheck(result)) {
 			return result;
 		}
-		doConnect(result);
-		result.setSampleLabel("test");
-		result.setSuccessful(true);
+		// 実験スタート
+		result.sampleStart();
+		doConnect();
+		setupResult(result, connectCode, true);
 		return result;
 	}
-	
-	// - 実処理 -------------- //
+	/**
+	 * 結果の作成補助関数
+	 * @param result resultオブジェクト
+	 * @param reason 文字列の結果データ
+	 * @param success 成功したかどうかフラグ
+	 */
 	private void setupResult(SampleResult result, String reason, boolean success) {
+		// サンプル動作完了
 		result.sampleEnd();
 		StringBuilder str = new StringBuilder();
 		str.append(getName());
@@ -48,6 +68,11 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		result.setResponseData(reason.getBytes());
 		result.setDataType(SampleResult.TEXT);
 	}
+	/**
+	 * 実行前動作確認(エラー時は動作確認にかかった時間をレポートする。)
+	 * @param result
+	 * @return true:問題なし。 false:問題あり、サンプリング強制終了
+	 */
 	private boolean preCheck(SampleResult result) {
 		result.sampleStart();
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
@@ -69,8 +94,14 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		}
 		return true;
 	}
-	private void doConnect(SampleResult result) {
-		result.sampleStart();
+	/**
+	 * 接続動作
+	 * @param result
+	 */
+	@Junit({
+		@Test({})
+	})
+	private void doConnect() {
 		RtmpClientEx rtmpClient = new RtmpClientEx(
 				rtmpConnectConfig.getServer(),
 				rtmpConnectConfig.getPort(),
@@ -81,9 +112,13 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 			Thread.sleep(10000);
 		}
 		catch (Exception e) {
+			System.out.println(connectCode);
 		}
-		setupResult(result, connectCode, true);
 	}
+	/**
+	 * コネクト時のコールバック関数
+	 * @author taktod
+	 */
 	private class ConnectEvent implements IRtmpClientEx {
 		private Thread t;
 		public ConnectEvent(Thread currentThread) {
@@ -105,7 +140,6 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 			return null;
 		}
 	}
-	// - 変数 ------------- //
 	/**
 	 * @return the variableName
 	 */
@@ -118,14 +152,12 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	public void setVariableName(String variableName) {
 		this.variableName = variableName;
 	}
-
 	/**
 	 * @return the perThread
 	 */
 	public boolean isPerThread() {
 		return perThread;
 	}
-
 	/**
 	 * @param perThread the perThread to set
 	 */
@@ -133,4 +165,23 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		this.perThread = perThread;
 	}
 
+
+
+
+
+	/**
+	 * Junitテスト用のデフォルトデータ入りコンストラクタ
+	 * @param config
+	 * @param variableName
+	 * @param perThread
+	 */
+	@SuppressWarnings("unused")
+	@Init({"init", "rtmp", "true"})
+	private RtmpConnectionSampler(RtmpConnectConfig config, String variableName, boolean perThread) {
+		// configが自動生成されている。
+		setVariableName(variableName);
+		setPerThread(perThread);
+		rtmpConnectConfig = config;
+		RtmpData rtmpData = rtmpConnectConfig.getRtmpData(perThread);
+	}
 }
