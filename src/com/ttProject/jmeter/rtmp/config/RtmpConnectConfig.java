@@ -36,7 +36,7 @@ public class RtmpConnectConfig extends AbstractTestElement
 		rtmpData = new ConcurrentHashMap<Thread, RtmpData>();
 	}
 	@SuppressWarnings("unused")
-	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat", "http://localhost/test.html", "http://localhost/test.swf"})
+	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat/135", "http://localhost/test.html", "http://localhost/test.swf"})
 	private RtmpConnectConfig(
 			String variableName,
 			String rtmpUrl,

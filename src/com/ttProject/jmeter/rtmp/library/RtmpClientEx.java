@@ -36,6 +36,9 @@ public class RtmpClientEx extends RTMPClient{
 	private Object tmplistener;
 	private String name;
 	private MODE mode = null;
+
+	private Map<String, Object[]> invokeHistory = new ConcurrentHashMap<String, Object[]>();
+
 	private enum MODE{
 		Play, Publish;
 	}
@@ -211,6 +214,14 @@ public class RtmpClientEx extends RTMPClient{
 			super.onInvoke(conn, channel, source, invoke, rtmp);
 			return;
 		}
+		// to store the onInvoke history...
+		try {
+			invokeHistory.put(call.getServiceMethodName(), call.getArguments());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		IPendingServiceCall pscall = (IPendingServiceCall)call;
 		if(result == null) {
 			call.setStatus(Call.STATUS_METHOD_NOT_FOUND);
@@ -314,5 +325,13 @@ public class RtmpClientEx extends RTMPClient{
 				wrapped.resultReceived(call);
 			}
 		}
+	}
+	/**
+	 * get the passed invoke event.
+	 * @param methodName
+	 * @return
+	 */
+	public Object[] getOnInvokeData(String methodName) {
+		return invokeHistory.get(methodName);
 	}
 }

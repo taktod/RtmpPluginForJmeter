@@ -8,6 +8,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.service.IServiceCall;
+import org.red5.server.net.rtmp.ClientExceptionHandler;
 
 import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
@@ -25,6 +26,7 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	private String variableName = null;
 	
 	private RtmpConnectConfig rtmpConnectConfig = null;
+	private RtmpData rtmpData = null;
 	private String connectCode;
 	/**
 	 * 通常のコンストラクタ
@@ -86,7 +88,7 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 			setupResult(result, rtmpConnectConfig.getName() + "'s rtmpurl is invalid...", false);
 			return false;
 		}
-		RtmpData rtmpData = rtmpConnectConfig.getRtmpData(perThread);
+		rtmpData = rtmpConnectConfig.getRtmpData(perThread);
 		if(rtmpData.getRtmpClient() != null) {
 			// すでに接続が存在する。
 			setupResult(result, "rtmpConnection is already established", true);
@@ -102,11 +104,13 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		@Test({})
 	})
 	private void doConnect() {
+		ConnectEvent event = new ConnectEvent(Thread.currentThread());
 		RtmpClientEx rtmpClient = new RtmpClientEx(
 				rtmpConnectConfig.getServer(),
 				rtmpConnectConfig.getPort(),
 				rtmpConnectConfig.getApplication(),
-				new ConnectEvent(Thread.currentThread()));
+				event);
+		rtmpClient.setExceptionHandler(event);
 		rtmpClient.connect();
 		try {
 			Thread.sleep(10000);
@@ -114,12 +118,16 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		catch (Exception e) {
 			System.out.println(connectCode);
 		}
+		// 接続成功時はスレッドとrtmpClientを関係つけておき、次のサンプラーで利用できるようにしておく。
+		if("NetConnection.Connect.Success".equals(connectCode)) {
+			rtmpData.setRtmpClient(rtmpClient);
+		}
 	}
 	/**
 	 * コネクト時のコールバック関数
 	 * @author taktod
 	 */
-	private class ConnectEvent implements IRtmpClientEx {
+	private class ConnectEvent implements IRtmpClientEx, ClientExceptionHandler {
 		private Thread t;
 		public ConnectEvent(Thread currentThread) {
 			t = currentThread;
@@ -138,6 +146,14 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		@Override
 		public Object onInvoke(IServiceCall call) {
 			return null;
+		}
+		/**
+		 * 何らかの例外が発生した場合、動作をとめる。(相手のサーバーがみつからないとき等。)
+		 */
+		@Override
+		public void handleException(Throwable ex) {
+			connectCode = ex.getMessage();
+			t.interrupt();
 		}
 	}
 	/**
@@ -182,6 +198,6 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 		setVariableName(variableName);
 		setPerThread(perThread);
 		rtmpConnectConfig = config;
-		RtmpData rtmpData = rtmpConnectConfig.getRtmpData(perThread);
+		rtmpData = rtmpConnectConfig.getRtmpData(perThread);
 	}
 }
