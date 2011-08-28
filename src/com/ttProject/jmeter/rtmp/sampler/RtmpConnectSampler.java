@@ -3,13 +3,10 @@ package com.ttProject.jmeter.rtmp.sampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.service.IServiceCall;
 import org.red5.server.net.rtmp.ClientExceptionHandler;
 
-import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
@@ -22,9 +19,6 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	private static final long serialVersionUID = -3395716901195949497L;
 	
 	private boolean perThread;
-	
-	private RtmpConnectConfig rtmpConnectConfig = null;
-	private RtmpData rtmpData = null;
 	private String connectCode;
 	/**
 	 * 通常のコンストラクタ
@@ -40,7 +34,7 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
 		// 動作前確認
-		if(!preCheck(result)) {
+		if(!check(result)) {
 			return result;
 		}
 		// 実験スタート
@@ -54,21 +48,13 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	 * @param result
 	 * @return true:問題なし。 false:問題あり、サンプリング強制終了
 	 */
-	private boolean preCheck(SampleResult result) {
-		result.sampleStart();
-		JMeterVariables variables = JMeterContextService.getContext().getVariables();
-		Object obj = variables.getObject(getVariableName());
-		if(!(obj instanceof RtmpConnectConfig)) {
-			setupResult(result, "variableName is invalid" + getVariableName(), false);
+	@Override
+	protected boolean check(SampleResult result) {
+		if(!checkConfig(result)) {
 			return false;
 		}
-		rtmpConnectConfig = (RtmpConnectConfig)obj;
-		if(!rtmpConnectConfig.isValid()) {
-			setupResult(result, rtmpConnectConfig.getName() + "'s rtmpurl is invalid...", false);
-			return false;
-		}
-		rtmpData = rtmpConnectConfig.getRtmpData(perThread);
-		if(rtmpData.getRtmpClient() != null) {
+		// rtmpClientが接続しているか確認する。
+		if(getRtmpData().getRtmpClient() != null) {
 			// すでに接続が存在する。
 			setupResult(result, "rtmpConnection is already established", true);
 			return false;
@@ -85,21 +71,21 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	private void doConnect() {
 		ConnectEvent event = new ConnectEvent(Thread.currentThread());
 		RtmpClientEx rtmpClient = new RtmpClientEx(
-				rtmpConnectConfig.getServer(),
-				rtmpConnectConfig.getPort(),
-				rtmpConnectConfig.getApplication(),
+				getRtmpConnectConfig().getServer(),
+				getRtmpConnectConfig().getPort(),
+				getRtmpConnectConfig().getApplication(),
 				event);
 		rtmpClient.setExceptionHandler(event);
 		rtmpClient.connect();
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(getTimeOutVal());
 		}
 		catch (Exception e) {
 			System.out.println(connectCode);
 		}
 		// 接続成功時はスレッドとrtmpClientを関係つけておき、次のサンプラーで利用できるようにしておく。
 		if("NetConnection.Connect.Success".equals(connectCode)) {
-			rtmpData.setRtmpClient(rtmpClient);
+			getRtmpData().setRtmpClient(rtmpClient);
 		}
 	}
 	/**
@@ -161,10 +147,9 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	@SuppressWarnings("unused")
 	@Init({"init", "rtmp", "true"})
 	private RtmpConnectSampler(RtmpConnectConfig config, String variableName, boolean perThread) {
+		super(config);
 		// configが自動生成されている。
 		setVariableName(variableName);
 		setPerThread(perThread);
-		rtmpConnectConfig = config;
-		rtmpData = rtmpConnectConfig.getRtmpData(perThread);
 	}
 }
