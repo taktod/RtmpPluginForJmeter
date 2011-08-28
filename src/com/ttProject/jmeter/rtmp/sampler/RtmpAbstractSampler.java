@@ -20,8 +20,6 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 
 	/** Configデータ */
 	private RtmpConnectConfig rtmpConnectConfig = null;
-	/** rtmp接続データ */
-	private RtmpData rtmpData = null;
 
 	/**
 	 * コンストラクタ
@@ -88,8 +86,7 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 */
 	protected boolean checkRtmpData(SampleResult result) {
 		result.sampleStart();
-		rtmpData = rtmpConnectConfig.getRtmpData();
-		if(rtmpData.getRtmpClient() != null) {
+		if(rtmpConnectConfig.getRtmpData().getRtmpClient() == null) {
 			// すでに接続が存在する。
 			setupResult(result, "rtmpConnection is not established yet...", false);
 			return false;
@@ -118,7 +115,14 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 * @return the rtmpData
 	 */
 	protected RtmpData getRtmpData() {
-		return rtmpData;
+		return rtmpConnectConfig.getRtmpData();
+	}
+	/**
+	 * @param perThread
+	 * @return the rtmpData
+	 */
+	protected RtmpData getRtmpData(Boolean perThread) {
+		return rtmpConnectConfig.getRtmpData(perThread);
 	}
 
 
@@ -131,6 +135,6 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 */
 	protected RtmpAbstractSampler(RtmpConnectConfig config) {
 		rtmpConnectConfig = config;
-		rtmpData = rtmpConnectConfig.getRtmpData(true);
+		rtmpConnectConfig.getRtmpData(true);
 	}
 }

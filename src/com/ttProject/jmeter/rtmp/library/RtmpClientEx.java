@@ -268,6 +268,7 @@ public class RtmpClientEx extends RTMPClient{
 		}
 		// to store the onInvoke history...
 		try {
+			System.out.println(call.getServiceMethodName());
 			invokeHistory.put(call.getServiceMethodName(), call.getArguments());
 		}
 		catch (Exception e) {
@@ -391,6 +392,6 @@ public class RtmpClientEx extends RTMPClient{
 	 * @return
 	 */
 	public Object[] getOnInvokeData(String methodName) {
-		return invokeHistory.get(methodName);
+		return invokeHistory.remove(methodName);
 	}
 }

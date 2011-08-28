@@ -43,13 +43,16 @@ public class RtmpDisconnectSampler extends RtmpTimeoutAbstractSampler implements
 		rtmpClient.disconnect();
 		try {
 			Thread.sleep(getTimeOutVal());
-			disconnectCode = "DisconnectTimeout";
-			return false;
+			disconnectCode = "Disconnect Timeout";
 		}
-		catch (Exception e) {
+		catch (InterruptedException e) {
 			disconnectCode = "Disconnect ok";
 			return true;
 		}
+		catch (Exception e) {
+			disconnectCode = e.getMessage();
+		}
+		return false;
 	}
 	/**
 	 * 切断イベント

@@ -37,17 +37,23 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 */
 	@Override
 	public SampleResult sample(Entry entry) {
-		SampleResult result = new SampleResult();
-		boolean success = false;
-		// 動作前確認
-		if(!check(result)) {
+		try {
+			SampleResult result = new SampleResult();
+			boolean success = false;
+			// 動作前確認
+			if(!check(result)) {
+				return result;
+			}
+			// 実験スタート
+			result.sampleStart();
+			success = doConnect();
+			setupResult(result, connectCode, success);
 			return result;
 		}
-		// 実験スタート
-		result.sampleStart();
-		success = doConnect();
-		setupResult(result, connectCode, success);
-		return result;
+		catch (Exception e) {
+			e.printStackTrace(System.out);
+			return null;
+		}
 	}
 	/**
 	 * 実行前動作確認(エラー時は動作確認にかかった時間をレポートする。)
@@ -60,7 +66,7 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 			return false;
 		}
 		// rtmpClientが接続しているか確認する。
-		if(getRtmpData().getRtmpClient() != null) {
+		if(getRtmpConnectConfig().getRtmpData(isPerThread()).getRtmpClient() != null) {
 			// すでに接続が存在する。
 			setupResult(result, "rtmpConnection is already established", true);
 			return false;
@@ -85,10 +91,14 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 		rtmpClient.connect();
 		try {
 			Thread.sleep(getTimeOutVal());
-			connectCode = "ConnectionTimeout";
+			connectCode = "Connection Timeout";
+		}
+		catch (InterruptedException e) {
+			;
 		}
 		catch (Exception e) {
-			System.out.println(connectCode);
+			e.printStackTrace(System.out);
+			connectCode = e.getMessage();
 		}
 		// 接続成功時はスレッドとrtmpClientを関係つけておき、次のサンプラーで利用できるようにしておく。
 		if("NetConnection.Connect.Success".equals(connectCode)) {
@@ -129,6 +139,7 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 		 */
 		@Override
 		public void handleException(Throwable ex) {
+			ex.printStackTrace(System.out);
 			connectCode = ex.getMessage();
 			t.interrupt();
 		}
