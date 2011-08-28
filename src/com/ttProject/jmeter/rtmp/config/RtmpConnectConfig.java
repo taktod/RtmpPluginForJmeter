@@ -109,6 +109,7 @@ public class RtmpConnectConfig extends AbstractTestElement
 	public void testStarted() {
 		System.out.println("test start...");
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
+		System.out.println(variableName);
 		if(variableName != null && !variableName.equals("")) {
 			variables.putObject(variableName, this);
 		}

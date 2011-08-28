@@ -22,7 +22,6 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	private static final long serialVersionUID = -3395716901195949497L;
 	
 	private boolean perThread;
-	private String variableName = null;
 	
 	private RtmpConnectConfig rtmpConnectConfig = null;
 	private RtmpData rtmpData = null;
@@ -58,9 +57,9 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 	private boolean preCheck(SampleResult result) {
 		result.sampleStart();
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
-		Object obj = variables.getObject(variableName);
+		Object obj = variables.getObject(getVariableName());
 		if(!(obj instanceof RtmpConnectConfig)) {
-			setupResult(result, "variableName is invalid", false);
+			setupResult(result, "variableName is invalid" + getVariableName(), false);
 			return false;
 		}
 		rtmpConnectConfig = (RtmpConnectConfig)obj;
@@ -135,18 +134,6 @@ public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean 
 			connectCode = ex.getMessage();
 			t.interrupt();
 		}
-	}
-	/**
-	 * @return the variableName
-	 */
-	public String getVariableName() {
-		return variableName;
-	}
-	/**
-	 * @param variableName the variableName to set
-	 */
-	public void setVariableName(String variableName) {
-		this.variableName = variableName;
 	}
 	/**
 	 * @return the perThread

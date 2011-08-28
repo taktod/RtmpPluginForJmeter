@@ -6,7 +6,9 @@ import org.apache.jmeter.samplers.SampleResult;
 public abstract class RtmpAbstractSampler extends AbstractSampler {
 	/** これ、あるのはおかしいかも */
 	private static final long serialVersionUID = 5240863586661986006L;
-
+	private String variableName = null;
+	private String timeOut = null;
+	private Long timeOutVal;
 	/**
 	 * 結果の作成補助関数
 	 * @param result resultオブジェクト
@@ -26,4 +28,39 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 		result.setResponseData(reason.getBytes());
 		result.setDataType(SampleResult.TEXT);
 	}
+	/**
+	 * @return the variableName
+	 */
+	public String getVariableName() {
+		return variableName;
+	}
+	/**
+	 * @param variableName the variableName to set
+	 */
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+	/**
+	 * @return the timeout
+	 */
+	public String getTimeOut() {
+		return timeOut;
+	}
+	public Long getTimeOutVal() {
+		return timeOutVal;
+	}
+	/**
+	 * @param timeout the timeout to set
+	 */
+	public void setTimeOut(String timeOut) {
+		try {
+			this.timeOutVal = Long.parseLong(timeOut);
+			this.timeOut = timeOut;
+		}
+		catch (Exception e) {
+			this.timeOut = "";
+			timeOutVal = null;
+		}
+	}
+	
 }
