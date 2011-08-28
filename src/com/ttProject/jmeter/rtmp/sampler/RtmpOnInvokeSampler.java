@@ -9,7 +9,7 @@ public class RtmpOnInvokeSampler extends AbstractSampler implements TestBean {
 	private static final long serialVersionUID = -2210763145979103988L;
 
 	@Override
-	public SampleResult sample(Entry arg0) {
+	public SampleResult sample(Entry entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}

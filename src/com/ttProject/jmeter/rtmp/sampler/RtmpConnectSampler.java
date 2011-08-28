@@ -1,6 +1,5 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -18,7 +17,7 @@ import com.ttProject.junit.annotation.Init;
 import com.ttProject.junit.annotation.Junit;
 import com.ttProject.junit.annotation.Test;
 
-public class RtmpConnectSampler extends AbstractSampler implements TestBean {
+public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean {
 	/** serialID */
 	private static final long serialVersionUID = -3395716901195949497L;
 	
@@ -50,25 +49,6 @@ public class RtmpConnectSampler extends AbstractSampler implements TestBean {
 		doConnect();
 		setupResult(result, connectCode, true);
 		return result;
-	}
-	/**
-	 * 結果の作成補助関数
-	 * @param result resultオブジェクト
-	 * @param reason 文字列の結果データ
-	 * @param success 成功したかどうかフラグ
-	 */
-	private void setupResult(SampleResult result, String reason, boolean success) {
-		// サンプル動作完了
-		result.sampleEnd();
-		StringBuilder str = new StringBuilder();
-		str.append(getName());
-		str.append("[");
-		str.append(Thread.currentThread().getName());
-		str.append("]");
-		result.setSampleLabel(str.toString());
-		result.setSuccessful(success);
-		result.setResponseData(reason.getBytes());
-		result.setDataType(SampleResult.TEXT);
 	}
 	/**
 	 * 実行前動作確認(エラー時は動作確認にかかった時間をレポートする。)
