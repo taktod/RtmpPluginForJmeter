@@ -14,11 +14,16 @@ import com.ttProject.junit.annotation.Init;
 import com.ttProject.junit.annotation.Junit;
 import com.ttProject.junit.annotation.Test;
 
+/**
+ * Rtmpのサーバーへの接続をサンプリングする。
+ * @author taktod
+ */
 public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements TestBean {
-	/** serialID */
+	/** シリアル番号 */
 	private static final long serialVersionUID = -3395716901195949497L;
-	
+	/** スレッドごとの動作をするかフラグ */
 	private boolean perThread;
+	/** 接続後のサーバーからの応答コード */
 	private String connectCode;
 	/**
 	 * 通常のコンストラクタ
@@ -33,14 +38,15 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	@Override
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
+		boolean success = false;
 		// 動作前確認
 		if(!check(result)) {
 			return result;
 		}
 		// 実験スタート
 		result.sampleStart();
-		doConnect();
-		setupResult(result, connectCode, true);
+		success = doConnect();
+		setupResult(result, connectCode, success);
 		return result;
 	}
 	/**
@@ -68,7 +74,7 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	@Junit({
 		@Test({})
 	})
-	private void doConnect() {
+	private boolean doConnect() {
 		ConnectEvent event = new ConnectEvent(Thread.currentThread());
 		RtmpClientEx rtmpClient = new RtmpClientEx(
 				getRtmpConnectConfig().getServer(),
@@ -79,6 +85,7 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 		rtmpClient.connect();
 		try {
 			Thread.sleep(getTimeOutVal());
+			connectCode = "ConnectionTimeout";
 		}
 		catch (Exception e) {
 			System.out.println(connectCode);
@@ -86,6 +93,11 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 		// 接続成功時はスレッドとrtmpClientを関係つけておき、次のサンプラーで利用できるようにしておく。
 		if("NetConnection.Connect.Success".equals(connectCode)) {
 			getRtmpData().setRtmpClient(rtmpClient);
+			return true;
+		}
+		else {
+			rtmpClient.disconnect();
+			return false;
 		}
 	}
 	/**
@@ -145,9 +157,9 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * @param perThread
 	 */
 	@SuppressWarnings("unused")
-	@Init({"init", "rtmp", "true"})
-	private RtmpConnectSampler(RtmpConnectConfig config, String variableName, boolean perThread) {
-		super(config);
+	@Init({"init", "rtmp", "true", "5000"})
+	private RtmpConnectSampler(RtmpConnectConfig config, String variableName, boolean perThread, long timeout) {
+		super(config, timeout);
 		// configが自動生成されている。
 		setVariableName(variableName);
 		setPerThread(perThread);

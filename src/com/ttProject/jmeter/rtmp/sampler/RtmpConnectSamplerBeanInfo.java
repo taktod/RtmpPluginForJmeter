@@ -1,11 +1,15 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import java.beans.PropertyDescriptor;
-
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
-@SuppressWarnings("unused")
+/**
+ * 接続サンプリングの詳細設定
+ * @author taktod
+ */
 public class RtmpConnectSamplerBeanInfo extends BeanInfoSupport {
+	/**
+	 * コンストラクタ
+	 */
 	public RtmpConnectSamplerBeanInfo() {
 		super(RtmpConnectSampler.class);
 		

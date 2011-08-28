@@ -75,7 +75,7 @@ public class RtmpConnectConfig extends AbstractTestElement
 			if(rtmpDat != null) {
 				return rtmpDat;
 			}
-			return this.rtmpData.get(Thread.currentThread());
+			return rtmpData.get(Thread.currentThread());
 		}
 		if(!perThread) {
 			if(rtmpDat == null) {
@@ -259,7 +259,7 @@ public class RtmpConnectConfig extends AbstractTestElement
 			String rtmpUrl,
 			String pageUrl,
 			String swfUrl) {
-		super();
+		this();
 		setVariableName(variableName);
 		setRtmpUrl(rtmpUrl);
 		setPageUrl(pageUrl);

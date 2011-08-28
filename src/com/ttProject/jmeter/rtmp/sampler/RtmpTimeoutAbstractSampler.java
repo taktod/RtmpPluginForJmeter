@@ -2,18 +2,34 @@ package com.ttProject.jmeter.rtmp.sampler;
 
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 
+/**
+ * 共通部分を抜き出したクラスタイムアウトの部分
+ * @author taktod
+ */
 public abstract class RtmpTimeoutAbstractSampler extends RtmpAbstractSampler {
+	/** シリアル番号 */
 	private static final long serialVersionUID = 15383998085000665L;
+	/** タイムアウト設定値 */
 	private String timeOut = null;
+	/** タイムアウト実利用値 */
 	private Long timeOutVal;
+	/** タイムアウトのデータがない場合のデフォルトの値 */
 	private final long defaultTimeOutVal = 1000L;
-
+	/**
+	 * コンストラクタ
+	 */
+	public RtmpTimeoutAbstractSampler() {
+	}
 	/**
 	 * @return the timeout
 	 */
 	public String getTimeOut() {
 		return timeOut;
 	}
+	/**
+	 * タイムアウトの値
+	 * @return
+	 */
 	public Long getTimeOutVal() {
 		if(timeOutVal == null) {
 			return defaultTimeOutVal;
@@ -33,9 +49,20 @@ public abstract class RtmpTimeoutAbstractSampler extends RtmpAbstractSampler {
 			timeOutVal = null;
 		}
 	}
-	public RtmpTimeoutAbstractSampler() {
-	}
-	protected RtmpTimeoutAbstractSampler(RtmpConnectConfig config) {
+
+
+
+
+
+
+
+	/**
+	 * Junitテスト用のコンストラクタ
+	 * @param config
+	 */
+	protected RtmpTimeoutAbstractSampler(RtmpConnectConfig config, long timeOutVal) {
 		super(config);
+		this.timeOut = Long.toString(timeOutVal);
+		this.timeOutVal = timeOutVal;
 	}
 }

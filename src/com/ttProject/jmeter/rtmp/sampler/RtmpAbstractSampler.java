@@ -8,13 +8,24 @@ import org.apache.jmeter.threads.JMeterVariables;
 import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 
+/**
+ * 共通できる部分を抜き出したクラス
+ * @author taktod
+ */
 public abstract class RtmpAbstractSampler extends AbstractSampler {
+	/** シリアル番号 */
 	private static final long serialVersionUID = 5240863586661986006L;
+	/** Configの名前指定 */
 	private String variableName = null;
-	
+
+	/** Configデータ */
 	private RtmpConnectConfig rtmpConnectConfig = null;
+	/** rtmp接続データ */
 	private RtmpData rtmpData = null;
 
+	/**
+	 * コンストラクタ
+	 */
 	public RtmpAbstractSampler() {
 	}
 	/**
@@ -50,6 +61,11 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 		}
 		return true;
 	}
+	/**
+	 * コンフィグデータに問題ないか確認
+	 * @param result
+	 * @return
+	 */
 	protected boolean checkConfig(SampleResult result) {
 		result.sampleStart();
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
@@ -65,6 +81,11 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 		}
 		return true;
 	}
+	/**
+	 * Rtmp接続データを確認
+	 * @param result
+	 * @return
+	 */
 	protected boolean checkRtmpData(SampleResult result) {
 		result.sampleStart();
 		rtmpData = rtmpConnectConfig.getRtmpData();
@@ -104,8 +125,12 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 
 
 
+	/**
+	 * テスト用のコンストラクタ
+	 * @param config
+	 */
 	protected RtmpAbstractSampler(RtmpConnectConfig config) {
 		rtmpConnectConfig = config;
-		rtmpData = rtmpConnectConfig.getRtmpData();
+		rtmpData = rtmpConnectConfig.getRtmpData(true);
 	}
 }
