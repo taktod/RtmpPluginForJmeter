@@ -27,25 +27,38 @@ import org.red5.server.service.Call;
  * Class to connect other rtmp server.
  */
 public class RtmpClientEx extends RTMPClient{
+	/**  */
 	private String server;
+	/**  */
 	private int port;
+	/**  */
 	private String application;
+	/**  */
 	private RTMPConnection conn;
+	/**  */
 	private IRtmpClientEx listener;
 
+	/**  */
 	private Object tmplistener;
+	/**  */
 	private String name;
+	/**  */
 	private MODE mode = null;
 
+	/**  */
 	private Map<String, Object[]> invokeHistory = new ConcurrentHashMap<String, Object[]>();
 
+	/**  */
 	private enum MODE{
 		Play, Publish;
 	}
+	/**  */
 	private Map<String, Integer> streamIds = new ConcurrentHashMap<String, Integer>();
 	// Map to hold IEventDispatcher(play)orINetStreamEventHandler(publish)
+	/**  */
 	private Map<String, Object> listeners = new ConcurrentHashMap<String, Object>();
 	
+	/**  */
 	private final RTMPMinaIoHandlerEx ioHandler;
 	
 	public RtmpClientEx() {
@@ -126,30 +139,51 @@ public class RtmpClientEx extends RTMPClient{
 	public Integer getStreamId(String name) {
 		return streamIds.get(name);
 	}
-
+	/**
+	 * Connection with pre-set variable
+	 */
 	public void connect() {
 		this.connect(server, port, application);
 	}
+	/**
+	 * Connection with parameter
+	 * @param params
+	 */
 	public void connect(Object[] params) {
 		this.connect(server, port, makeDefaultConnectionParams(server, port, application), null, params);
 	}
+	/**
+	 * Connection with parameter and Url data
+	 * @param params
+	 * @param swfUrl
+	 * @param pageUrl
+	 */
 	public void connect(Object[] params, String swfUrl, String pageUrl) {
 		Map<String, Object> connectionParams = makeDefaultConnectionParams(server, port, application);
 		connectionParams.put("swfUrl", swfUrl);
 		connectionParams.put("pageUrl", pageUrl);
 		this.connect(server, port, connectionParams, null, params);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(String server, int port,
 			Map<String, Object> connectionParams) {
 		this.connect(server, port, connectionParams, null);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(String server, int port,
 			Map<String, Object> connectionParams,
 			IPendingServiceCallback connectCallback) {
 		this.connect(server, port, connectionParams, connectCallback, null);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(String server, int port,
 			Map<String, Object> connectionParams,
@@ -161,15 +195,24 @@ public class RtmpClientEx extends RTMPClient{
 		super.connect(server, port, connectionParams, new ConnectCallback(connectCallback),
 				connectCallArguments);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(String server, int port, String application) {
 		this.connect(server, port, application, null);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(String server, int port, String application,
 			IPendingServiceCallback connectCallback) {
 		this.connect(server, port, makeDefaultConnectionParams(server, port, application), connectCallback, null);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void startConnector(String server, int port) {
 		// make original connection with RTMPMinaIoHandlerEx
@@ -188,11 +231,17 @@ public class RtmpClientEx extends RTMPClient{
 		});
 		future.awaitUninterruptibly(CONNECTOR_WORKER_TIMEOUT);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connectionOpened(RTMPConnection conn, RTMP state) {
 		super.connectionOpened(conn, state);
 		this.conn = conn;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connectionClosed(RTMPConnection conn, RTMP state) {
 		if(listener != null) {
@@ -200,6 +249,9 @@ public class RtmpClientEx extends RTMPClient{
 		}
 		super.connectionClosed(conn, state);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onInvoke(RTMPConnection conn, Channel channel, Header source,
 			Notify invoke, RTMP rtmp) {
@@ -236,6 +288,9 @@ public class RtmpClientEx extends RTMPClient{
 		reply.setInvokeId(invoke.getInvokeId());
 		channel.write(reply);
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void createStream(IPendingServiceCallback callback) {
 		super.createStream(new CreateStreamCallback(callback));
@@ -264,6 +319,10 @@ public class RtmpClientEx extends RTMPClient{
 		createStream(null);
 		return true;
 	}
+	/**
+	 * media stream start support.
+	 * @param streamId
+	 */
 	private void startMediaStream(Integer streamId) {
 		switch(mode) {
 		case Play:

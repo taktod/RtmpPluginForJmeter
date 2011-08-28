@@ -6,12 +6,20 @@ import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.RTMPHandshake;
 import org.red5.server.net.rtmp.message.Constants;
 
+/**
+ * Handshake support for red5 RtmpClient
+ * @author taktod
+ */
 public class OutboundHandshakeEx extends OutboundHandshake {
-	private byte[] outgoingDigest;
+	/** client constant value */
 	private static final byte[] CLIENT_CONST = "Genuine Adobe Flash Player 001".getBytes();
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IoBuffer generateClientRequest1() {
+		byte[] outgoingDigest;
+
 		log.debug("generateClientRequest1");
 		IoBuffer request = IoBuffer.allocate(Constants.HANDSHAKE_SIZE/* 1536 */ + 1);
 		request.put(RTMPConnection.RTMP_NON_ENCRYPTED /* 3 */);
@@ -43,6 +51,11 @@ public class OutboundHandshakeEx extends OutboundHandshake {
 		request.flip();
 		return request;
 	}
+	/**
+	 * addByte
+	 * @param bytes
+	 * @return
+	 */
 	private int addBytes(byte[] bytes) {
 		if (bytes.length != 4) {
 			throw new RuntimeException("Unexpected byte array size: " + bytes.length);
@@ -53,7 +66,13 @@ public class OutboundHandshakeEx extends OutboundHandshake {
 		}
 		return result;
 	}
-
+	/**
+	 * calculateOffset size
+	 * @param pointer
+	 * @param modulus
+	 * @param increment
+	 * @return
+	 */
 	private int calculateOffset(byte[] pointer, int modulus, int increment) {
 		int offset = addBytes(pointer);
 		offset %= modulus;

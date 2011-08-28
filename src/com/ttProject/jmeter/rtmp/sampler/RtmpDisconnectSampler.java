@@ -6,7 +6,7 @@ import org.apache.jmeter.testbeans.TestBean;
 
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 
-public class RtmpDisconnectSampler extends RtmpAbstractSampler implements TestBean {
+public class RtmpDisconnectSampler extends RtmpTimeoutAbstractSampler implements TestBean {
 
 	/** シリアルID */
 	private static final long serialVersionUID = 4432585069468458531L;

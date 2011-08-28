@@ -15,45 +15,60 @@ import org.apache.jmeter.threads.JMeterVariables;
 import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.junit.annotation.Init;
 
+/**
+ * コンフィグデータ
+ * @author taktod
+ */
 public class RtmpConnectConfig extends AbstractTestElement 
 	implements TestBean, ConfigElement, TestListener {
 	/** シリアルバージョンID */
 	private static final long serialVersionUID = -6893264509399917662L;
 
-	// 設定項目
+	/** 設定データ名 */
 	private String variableName = null;
+	/** rtmp接続先 */
 	private String rtmpUrl = null;
+	/** SWF設置のページのURL */
 	private String pageUrl = null;
+	/** SWFのURL */
 	private String swfUrl = null;
 
+	/** Rtmp接続データ(各スレッド用) */
 	private Map<Thread, RtmpData> rtmpData = null;
+	/** Rtmp接続データ全体共有用 */
 	private RtmpData rtmpDat = null;
+	/** 接続先サーバー */
 	private String server = null;
+	/** 接続ポート */
 	private Integer port = null;
+	/** 接続アプリケーション */
 	private String application = null;
 
+	/**
+	 * コンストラクタ
+	 */
 	public RtmpConnectConfig() {
 		rtmpData = new ConcurrentHashMap<Thread, RtmpData>();
 	}
-	@SuppressWarnings("unused")
-	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat/135", "http://localhost/test.html", "http://localhost/test.swf"})
-	private RtmpConnectConfig(
-			String variableName,
-			String rtmpUrl,
-			String pageUrl,
-			String swfUrl) {
-		setVariableName(variableName);
-		setRtmpUrl(rtmpUrl);
-		setPageUrl(pageUrl);
-		setSwfUrl(swfUrl);
-		rtmpData = new ConcurrentHashMap<Thread, RtmpData>();
-	}
+	/**
+	 * 設定データが有効か確認
+	 * @return true:有効 false:無効
+	 */
 	public boolean isValid() {
 		return (server != null && port != null && application != null);
 	}
+	/**
+	 * RtmpDataの設定を応答する。
+	 * @return
+	 */
 	public RtmpData getRtmpData() {
 		return getRtmpData(null);
 	}
+	/**
+	 * RtmpDataの設定を応答する。
+	 * @param perThread
+	 * @return
+	 */
 	public RtmpData getRtmpData(Boolean perThread) {
 		if(perThread == null) {
 			// threadごとの指定がない場合はある方を応答する。
@@ -75,13 +90,23 @@ public class RtmpConnectConfig extends AbstractTestElement
 		}
 		return rtmpData;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addConfigElement(ConfigElement paramConfigElement) {
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean expectsModification() {
 		return false;
 	}
+	/**
+	 * {@inheritDoc}
+	 * <pre>テストが完了してもスレッドがのこっている限りここまでこないっぽい。</pre>
+	 */
 	@Override
 	public void testEnded() {
 		System.out.println("test end...");
@@ -99,12 +124,21 @@ public class RtmpConnectConfig extends AbstractTestElement
 		catch (Exception e) {
 		}
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void testEnded(String arg0) {
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void testIterationStart(LoopIterationEvent arg0) {
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void testStarted() {
 		System.out.println("test start...");
@@ -114,11 +148,13 @@ public class RtmpConnectConfig extends AbstractTestElement
 			variables.putObject(variableName, this);
 		}
 	}
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void testStarted(String arg0) {
 	}
 
-	// - データ ----------------------------------------------- /
 	/**
 	 * @return the variableName
 	 */
@@ -202,5 +238,31 @@ public class RtmpConnectConfig extends AbstractTestElement
 	 */
 	public String getApplication() {
 		return application;
+	}
+
+
+
+
+
+
+	/**
+	 * コンストラクタJunitテスト用
+	 * @param variableName
+	 * @param rtmpUrl
+	 * @param pageUrl
+	 * @param swfUrl
+	 */
+	@SuppressWarnings("unused")
+	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat/135", "http://localhost/test.html", "http://localhost/test.swf"})
+	private RtmpConnectConfig(
+			String variableName,
+			String rtmpUrl,
+			String pageUrl,
+			String swfUrl) {
+		super();
+		setVariableName(variableName);
+		setRtmpUrl(rtmpUrl);
+		setPageUrl(pageUrl);
+		setSwfUrl(swfUrl);
 	}
 }

@@ -5,7 +5,15 @@ import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.RTMPMinaIoHandler;
 import org.red5.server.net.rtmp.codec.RTMP;
 
+/**
+ * IoHandler to use custom outboundHandshake
+ * @author taktod
+ *
+ */
 public class RTMPMinaIoHandlerEx extends RTMPMinaIoHandler {
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sessionCreated(IoSession session) throws Exception {
 		super.sessionCreated(session);
