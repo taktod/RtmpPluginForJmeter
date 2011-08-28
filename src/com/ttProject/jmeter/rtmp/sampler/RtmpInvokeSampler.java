@@ -9,7 +9,6 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 
 	@Override
 	public SampleResult sample(Entry entry) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

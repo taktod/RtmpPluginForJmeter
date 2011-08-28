@@ -4,6 +4,8 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 
+import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
+
 public class RtmpDisconnectSampler extends RtmpAbstractSampler implements TestBean {
 
 	/** シリアルID */
@@ -20,6 +22,8 @@ public class RtmpDisconnectSampler extends RtmpAbstractSampler implements TestBe
 		return result;
 	}
 	private void doDisconnect() {
-		
+		RtmpClientEx rtmpClient = getRtmpData().getRtmpClient();
+		rtmpClient.disconnect();
+		getRtmpData().setRtmpClient(null);
 	}
 }

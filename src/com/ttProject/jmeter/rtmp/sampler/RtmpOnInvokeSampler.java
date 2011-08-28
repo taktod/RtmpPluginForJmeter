@@ -9,7 +9,11 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 
 	@Override
 	public SampleResult sample(Entry entry) {
-		return null;
+		SampleResult result = new SampleResult();
+		if(!check(result)) {
+			return result;
+		}
+		result.sampleStart();
+		return result;
 	}
-
 }
