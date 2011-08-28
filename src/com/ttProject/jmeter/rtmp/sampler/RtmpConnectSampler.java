@@ -14,7 +14,7 @@ import com.ttProject.junit.annotation.Init;
 import com.ttProject.junit.annotation.Junit;
 import com.ttProject.junit.annotation.Test;
 
-public class RtmpConnectSampler extends RtmpAbstractSampler implements TestBean {
+public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements TestBean {
 	/** serialID */
 	private static final long serialVersionUID = -3395716901195949497L;
 	

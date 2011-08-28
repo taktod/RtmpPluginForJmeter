@@ -9,12 +9,8 @@ import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 
 public abstract class RtmpAbstractSampler extends AbstractSampler {
-	/** これ、あるのはおかしいかも */
 	private static final long serialVersionUID = 5240863586661986006L;
 	private String variableName = null;
-	private String timeOut = null;
-	private Long timeOutVal;
-	private final long defaultTimeOutVal = 1000L;
 	
 	private RtmpConnectConfig rtmpConnectConfig = null;
 	private RtmpData rtmpData = null;
@@ -90,31 +86,6 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 */
 	public void setVariableName(String variableName) {
 		this.variableName = variableName;
-	}
-	/**
-	 * @return the timeout
-	 */
-	public String getTimeOut() {
-		return timeOut;
-	}
-	public Long getTimeOutVal() {
-		if(timeOutVal == null) {
-			return defaultTimeOutVal;
-		}
-		return timeOutVal;
-	}
-	/**
-	 * @param timeout the timeout to set
-	 */
-	public void setTimeOut(String timeOut) {
-		try {
-			this.timeOutVal = Long.parseLong(timeOut);
-			this.timeOut = timeOut;
-		}
-		catch (Exception e) {
-			this.timeOut = "";
-			timeOutVal = null;
-		}
 	}
 	/**
 	 * @return the rtmpConnectConfig
