@@ -65,7 +65,6 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 * @return
 	 */
 	protected boolean checkConfig(SampleResult result) {
-		result.sampleStart();
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
 		Object obj = variables.getObject(getVariableName());
 		if(!(obj instanceof RtmpConnectConfig)) {
@@ -85,7 +84,6 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 * @return
 	 */
 	protected boolean checkRtmpData(SampleResult result) {
-		result.sampleStart();
 		if(rtmpConnectConfig.getRtmpData().getRtmpClient() == null) {
 			// すでに接続が存在する。
 			setupResult(result, "rtmpConnection is not established yet...", false);
@@ -123,18 +121,5 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 */
 	protected RtmpData getRtmpData(Boolean perThread) {
 		return rtmpConnectConfig.getRtmpData(perThread);
-	}
-
-
-
-
-
-	/**
-	 * テスト用のコンストラクタ
-	 * @param config
-	 */
-	protected RtmpAbstractSampler(RtmpConnectConfig config) {
-		rtmpConnectConfig = config;
-		rtmpConnectConfig.getRtmpData(true);
 	}
 }

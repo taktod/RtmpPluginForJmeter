@@ -7,7 +7,6 @@ import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.service.IServiceCall;
 import org.red5.server.net.rtmp.ClientExceptionHandler;
 
-import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 import com.ttProject.junit.annotation.Init;
@@ -36,22 +35,25 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * @return
 	 */
 	@Override
+	@Junit({
+		@Test("null")
+	})
 	public SampleResult sample(Entry entry) {
 		try {
 			SampleResult result = new SampleResult();
+			result.sampleStart();
 			boolean success = false;
 			// 動作前確認
 			if(!check(result)) {
 				return result;
 			}
 			// 実験スタート
-			result.sampleStart();
 			success = doConnect();
 			setupResult(result, connectCode, success);
 			return result;
 		}
 		catch (Exception e) {
-			e.printStackTrace(System.out);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -77,9 +79,6 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * 接続動作
 	 * @param result
 	 */
-	@Junit({
-		@Test({})
-	})
 	private boolean doConnect() {
 		ConnectEvent event = new ConnectEvent(Thread.currentThread());
 		RtmpClientEx rtmpClient = new RtmpClientEx(
@@ -168,11 +167,12 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * @param perThread
 	 */
 	@SuppressWarnings("unused")
-	@Init({"init", "rtmp", "true", "5000"})
-	private RtmpConnectSampler(RtmpConnectConfig config, String variableName, boolean perThread, long timeout) {
-		super(config, timeout);
-		// configが自動生成されている。
+	@Init({"rtmp", "3000", "true"})
+	private RtmpConnectSampler(String variableName, String timeOut, boolean perThread) {
 		setVariableName(variableName);
+		setTimeOut(timeOut);
 		setPerThread(perThread);
+		
+		// なにかよけいな初期化が必要な場合はここに書き込む。
 	}
 }

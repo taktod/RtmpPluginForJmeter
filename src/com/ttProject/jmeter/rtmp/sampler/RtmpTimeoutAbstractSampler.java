@@ -1,7 +1,5 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
-
 /**
  * 共通部分を抜き出したクラスタイムアウトの部分
  * @author taktod
@@ -48,21 +46,5 @@ public abstract class RtmpTimeoutAbstractSampler extends RtmpAbstractSampler {
 			this.timeOut = "";
 			timeOutVal = null;
 		}
-	}
-
-
-
-
-
-
-
-	/**
-	 * Junitテスト用のコンストラクタ
-	 * @param config
-	 */
-	protected RtmpTimeoutAbstractSampler(RtmpConnectConfig config, long timeOutVal) {
-		super(config);
-		this.timeOut = Long.toString(timeOutVal);
-		this.timeOutVal = timeOutVal;
 	}
 }

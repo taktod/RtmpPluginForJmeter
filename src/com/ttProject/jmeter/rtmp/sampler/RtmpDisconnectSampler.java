@@ -8,6 +8,7 @@ import org.red5.server.api.service.IServiceCall;
 
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
+import com.ttProject.junit.annotation.Init;
 
 /**
  * 切断操作のサンプリング
@@ -19,16 +20,21 @@ public class RtmpDisconnectSampler extends RtmpTimeoutAbstractSampler implements
 	/** 切断状態 */
 	private String disconnectCode;
 	/**
+	 * コンストラクタ
+	 */
+	public RtmpDisconnectSampler() {
+	}
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
+		result.sampleStart();
 		boolean success = false;
 		if(!check(result)) {
 			return result;
 		}
-		result.sampleStart();
 		success = doDisconnect();
 		setupResult(result, disconnectCode, success);
 		return result;
@@ -77,6 +83,12 @@ public class RtmpDisconnectSampler extends RtmpTimeoutAbstractSampler implements
 		public Object onInvoke(IServiceCall call) {
 			return null;
 		}
-		
+	}
+
+	@SuppressWarnings("unused")
+	@Init({"rtmp", "4000"})
+	private RtmpDisconnectSampler(String variableName, String timeOut) {
+		setVariableName(variableName);
+		setTimeOut(timeOut);
 	}
 }
