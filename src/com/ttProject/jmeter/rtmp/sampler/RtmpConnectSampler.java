@@ -18,7 +18,7 @@ import com.ttProject.junit.annotation.Init;
 import com.ttProject.junit.annotation.Junit;
 import com.ttProject.junit.annotation.Test;
 
-public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
+public class RtmpConnectSampler extends AbstractSampler implements TestBean {
 	/** serialID */
 	private static final long serialVersionUID = -3395716901195949497L;
 	
@@ -31,7 +31,7 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	/**
 	 * 通常のコンストラクタ
 	 */
-	public RtmpConnectionSampler() {
+	public RtmpConnectSampler() {
 	}
 	/**
 	 * {@inheritDoc}
@@ -193,7 +193,7 @@ public class RtmpConnectionSampler extends AbstractSampler implements TestBean {
 	 */
 	@SuppressWarnings("unused")
 	@Init({"init", "rtmp", "true"})
-	private RtmpConnectionSampler(RtmpConnectConfig config, String variableName, boolean perThread) {
+	private RtmpConnectSampler(RtmpConnectConfig config, String variableName, boolean perThread) {
 		// configが自動生成されている。
 		setVariableName(variableName);
 		setPerThread(perThread);

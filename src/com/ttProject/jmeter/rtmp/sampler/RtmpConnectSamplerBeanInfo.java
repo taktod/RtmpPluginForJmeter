@@ -5,9 +5,9 @@ import java.beans.PropertyDescriptor;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 @SuppressWarnings("unused")
-public class RtmpConnectionSamplerBeanInfo extends BeanInfoSupport {
-	public RtmpConnectionSamplerBeanInfo() {
-		super(RtmpConnectionSampler.class);
+public class RtmpConnectSamplerBeanInfo extends BeanInfoSupport {
+	public RtmpConnectSamplerBeanInfo() {
+		super(RtmpConnectSampler.class);
 		
 //		createPropertyGroup("test", new String[]{"variableName", "perThread"});
 //		PropertyDescriptor p;
