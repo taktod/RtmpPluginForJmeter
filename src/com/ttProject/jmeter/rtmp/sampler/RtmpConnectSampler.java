@@ -9,9 +9,6 @@ import org.red5.server.net.rtmp.ClientExceptionHandler;
 
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
-import com.ttProject.junit.annotation.Init;
-import com.ttProject.junit.annotation.Junit;
-import com.ttProject.junit.annotation.Test;
 
 /**
  * Rtmpのサーバーへの接続をサンプリングする。
@@ -35,9 +32,6 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * @return
 	 */
 	@Override
-	@Junit({
-		@Test("null")
-	})
 	public SampleResult sample(Entry entry) {
 		try {
 			SampleResult result = new SampleResult();
@@ -167,7 +161,6 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 * @param perThread
 	 */
 	@SuppressWarnings("unused")
-	@Init({"rtmp", "3000", "true"})
 	private RtmpConnectSampler(String variableName, String timeOut, boolean perThread) {
 		setVariableName(variableName);
 		setTimeOut(timeOut);

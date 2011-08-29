@@ -8,7 +8,6 @@ import org.red5.server.api.service.IServiceCall;
 
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
-import com.ttProject.junit.annotation.Init;
 
 public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements TestBean {
 	private static final long serialVersionUID = -2210763145979103988L;
@@ -106,7 +105,6 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 	}
 	
 	@SuppressWarnings("unused")
-	@Init({"rtmp", "4000", "testCall", "null"})
 	private RtmpOnInvokeSampler(String variableName, String timeOut, String methodName, String returnValue) {
 		setVariableName(variableName);
 		setTimeOut(timeOut);

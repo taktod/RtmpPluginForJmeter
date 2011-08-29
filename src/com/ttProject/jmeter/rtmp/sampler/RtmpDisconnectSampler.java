@@ -8,7 +8,6 @@ import org.red5.server.api.service.IServiceCall;
 
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
-import com.ttProject.junit.annotation.Init;
 
 /**
  * 切断操作のサンプリング
@@ -86,7 +85,6 @@ public class RtmpDisconnectSampler extends RtmpTimeoutAbstractSampler implements
 	}
 
 	@SuppressWarnings("unused")
-	@Init({"rtmp", "4000"})
 	private RtmpDisconnectSampler(String variableName, String timeOut) {
 		setVariableName(variableName);
 		setTimeOut(timeOut);
