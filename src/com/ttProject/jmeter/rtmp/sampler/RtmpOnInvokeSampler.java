@@ -1,5 +1,7 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -8,6 +10,8 @@ import org.red5.server.api.service.IServiceCall;
 
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
+import com.ttProject.junit.exception.ConstructorNotFoundException;
+import com.ttProject.junit.library.MethodChecker;
 
 public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements TestBean {
 	private static final long serialVersionUID = -2210763145979103988L;
@@ -36,7 +40,7 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 		Object[] ret = rtmpClient.getOnInvokeData(methodName);
 		if(ret == null) {
 			// メッセージが設置されていない場合はtimeoutまでデータを待つ。
-			rtmpClient.setListener(new onInvokeEvent(Thread.currentThread()));
+			rtmpClient.setListener(new OnInvokeEvent(Thread.currentThread()));
 			try {
 				Thread.sleep(getTimeOutVal());
 				onInvokeResult = "onInvoke Timeout";
@@ -57,9 +61,9 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 		}
 		return true;
 	}
-	private class onInvokeEvent implements IRtmpClientEx {
+	private class OnInvokeEvent implements IRtmpClientEx {
 		private Thread t;
-		public onInvokeEvent(Thread currentThread) {
+		public OnInvokeEvent(Thread currentThread) {
 			t = currentThread;
 		}
 		@Override
@@ -105,10 +109,12 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 	}
 	
 	@SuppressWarnings("unused")
-	private RtmpOnInvokeSampler(String variableName, String timeOut, String methodName, String returnValue) {
+	private RtmpOnInvokeSampler(String variableName, String timeOut, String methodName, String returnValue) throws ConstructorNotFoundException, InvocationTargetException {
+		RtmpConnectSampler connect = (RtmpConnectSampler)new MethodChecker().getClassInstance(RtmpConnectSampler.class);
 		setVariableName(variableName);
 		setTimeOut(timeOut);
 		setMethodName(methodName);
 		setReturnValue(returnValue);
+		connect.sample(null);
 	}
 }

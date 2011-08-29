@@ -13,6 +13,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 import com.ttProject.jmeter.rtmp.RtmpData;
+import com.ttProject.junit.annotation.Init;
 
 /**
  * コンフィグデータ
@@ -243,7 +244,6 @@ public class RtmpConnectConfig extends AbstractTestElement
 
 
 
-
 	/**
 	 * コンストラクタJunitテスト用
 	 * @param variableName
@@ -252,6 +252,8 @@ public class RtmpConnectConfig extends AbstractTestElement
 	 * @param swfUrl
 	 */
 	@SuppressWarnings("unused")
+	@Init({"rtmp", "rtmp://49.212.39.17/avatarChat", 
+		"http://localhost/index.html", "http://localhost/test.swf"})
 	private RtmpConnectConfig(
 			String variableName,
 			String rtmpUrl,

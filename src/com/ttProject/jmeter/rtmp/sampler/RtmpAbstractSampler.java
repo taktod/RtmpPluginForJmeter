@@ -65,6 +65,9 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	 * @return
 	 */
 	protected boolean checkConfig(SampleResult result) {
+		if(result == null) {
+			return false;
+		}
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
 		Object obj = variables.getObject(getVariableName());
 		if(!(obj instanceof RtmpConnectConfig)) {
