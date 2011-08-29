@@ -1,7 +1,5 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -15,7 +13,6 @@ import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 import com.ttProject.junit.annotation.Init;
 import com.ttProject.junit.annotation.Junit;
 import com.ttProject.junit.annotation.Test;
-import com.ttProject.junit.exception.ConstructorNotFoundException;
 import com.ttProject.junit.library.MethodChecker;
 
 /**
@@ -37,6 +34,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
 		result.sampleStart();
+//		result.setRequestHeaders()
 		boolean success = false;
 		if(!check(result)) {
 			return result;
@@ -91,7 +89,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 
 	@SuppressWarnings("unused")
 	@Init({"rtmp", "4000", "testCall"})
-	private RtmpInvokeSampler(String variableName, String timeOut, String methodName) throws ConstructorNotFoundException, InvocationTargetException {
+	private RtmpInvokeSampler(String variableName, String timeOut, String methodName) throws Exception {
 		RtmpConnectSampler connect = (RtmpConnectSampler)new MethodChecker().getClassInstance(RtmpConnectSampler.class);
 		setVariableName(variableName);
 		setTimeOut(timeOut);
