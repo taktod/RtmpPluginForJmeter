@@ -89,7 +89,7 @@ public abstract class RtmpAbstractSampler extends AbstractSampler {
 	protected boolean checkRtmpData(SampleResult result) {
 		if(rtmpConnectConfig.getRtmpData().getRtmpClient() == null) {
 			// すでに接続が存在する。
-			setupResult(result, "rtmpConnection is not established yet...", false);
+			setupResult(result, "rtmpConnection is not established yet..." + rtmpConnectConfig.getRtmpData().hashCode(), false);
 			return false;
 		}
 		return true;
