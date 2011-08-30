@@ -29,12 +29,11 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	}
 	@Override
 	@Junit({
-		@Test({"null"})
+		@Test(init={"rt", "4000", "true"}, value={"null"}, assume="@custom[]")
 	})
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
 		result.sampleStart();
-//		result.setRequestHeaders()
 		boolean success = false;
 		if(!check(result)) {
 			return result;

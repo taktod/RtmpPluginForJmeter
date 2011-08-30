@@ -23,4 +23,30 @@ public class JunitTestEntry extends TestEntry {
 
 		super.setUp();
 	}
+	@Override
+	public boolean dump(Object obj) {
+		if(obj instanceof SampleResult) {
+			SampleResult result = (SampleResult) obj;
+			System.out.println("[SampleResult]");
+			System.out.println("success? : " + result.isSuccessful());
+			System.out.println(result.getResponseDataAsString());
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public boolean customCheck(String assume, Object ret) {
+		if(ret instanceof SampleResult) {
+			SampleResult result = (SampleResult)ret;
+			if(result.isSuccessful()) {
+				System.out.println(result.getResponseDataAsString());
+				return true;
+			}
+			else {
+				System.out.println(result.getResponseDataAsString());
+				return false;
+			}
+		}
+		return super.customCheck(assume, ret);
+	}
 }
