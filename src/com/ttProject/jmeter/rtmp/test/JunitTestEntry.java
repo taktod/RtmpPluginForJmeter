@@ -8,9 +8,17 @@ import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
 import com.ttProject.junit.TestEntry;
 import com.ttProject.junit.library.MethodChecker;
 
+/**
+ * Junitテストを実行するための下準備
+ * @author taktod
+ */
 public class JunitTestEntry extends TestEntry {
+	/**
+	 * 初期化処理
+	 */
 	@Override
 	public void setUp() throws Exception {
+		// 対象パッケージを指定
 		setPackagePath("com.ttProject.jmeter.rtmp");
 
 		// (先にconnectionConfigをセットしておく。)
@@ -23,6 +31,9 @@ public class JunitTestEntry extends TestEntry {
 
 		super.setUp();
 	}
+	/**
+	 * dump出力の部分でSampleResultだけ中身がわかるようにしておく。
+	 */
 	@Override
 	public boolean dump(Object obj) {
 		if(obj instanceof SampleResult) {
@@ -34,17 +45,30 @@ public class JunitTestEntry extends TestEntry {
 		}
 		return true;
 	}
+	/**
+	 * assume=@customでSampleResultの内容確認するようにした。
+	 */
 	@Override
 	public boolean customCheck(String assume, Object ret) {
 		if(ret instanceof SampleResult) {
+			String target = assume.replace("@custom", "").replace("[", "").replace("]", "");
 			SampleResult result = (SampleResult)ret;
-			if(result.isSuccessful()) {
-				System.out.println(result.getResponseDataAsString());
-				return true;
+			System.out.println(result.getResponseDataAsString());
+			if("".equals(target)) {
+				if(result.isSuccessful()) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 			else {
-				System.out.println(result.getResponseDataAsString());
-				return false;
+				if(result.getResponseDataAsString().indexOf(target) != -1) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 		}
 		return super.customCheck(assume, ret);

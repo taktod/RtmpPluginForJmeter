@@ -29,7 +29,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	}
 	@Override
 	@Junit({
-		@Test(init={"rt", "4000", "true"}, value={"null"}, assume="@custom[]")
+		@Test(init={"rt", "4000", "true"}, value={"null"}, assume="@custom[variableName is invalid]")
 	})
 	public SampleResult sample(Entry entry) {
 		SampleResult result = new SampleResult();
