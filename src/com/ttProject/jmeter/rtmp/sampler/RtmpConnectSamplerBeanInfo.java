@@ -19,5 +19,6 @@ public class RtmpConnectSamplerBeanInfo extends BeanInfoSupport {
 		PropertyDescriptor p;
 		p = property("perThread");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, Boolean.TRUE);
 	}
 }

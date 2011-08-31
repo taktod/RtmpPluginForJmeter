@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -20,7 +21,7 @@ import com.ttProject.junit.annotation.Init;
  * @author taktod
  */
 public class RtmpConnectConfig extends AbstractTestElement 
-	implements TestBean, ConfigElement, TestListener {
+	implements TestBean, ConfigElement, TestListener, NoThreadClone {
 	/** シリアルバージョンID */
 	private static final long serialVersionUID = -6893264509399917662L;
 

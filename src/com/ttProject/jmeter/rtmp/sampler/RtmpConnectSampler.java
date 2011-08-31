@@ -3,6 +3,7 @@ package com.ttProject.jmeter.rtmp.sampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.service.IServiceCall;
 import org.red5.server.net.rtmp.ClientExceptionHandler;
@@ -15,7 +16,7 @@ import com.ttProject.junit.annotation.Init;
  * Rtmpのサーバーへの接続をサンプリングする。
  * @author taktod
  */
-public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements TestBean {
+public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements TestBean, ThreadListener {
 	/** シリアル番号 */
 	private static final long serialVersionUID = -3395716901195949497L;
 	/** スレッドごとの動作をするかフラグ */
@@ -152,6 +153,14 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	 */
 	public void setPerThread(boolean perThread) {
 		this.perThread = perThread;
+	}
+	@Override
+	public void threadStarted() {
+		// 
+	}
+	@Override
+	public void threadFinished() {
+		// 
 	}
 
 
