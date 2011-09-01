@@ -1,5 +1,8 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -24,6 +27,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	/** シリアル番号 */
 	private static final long serialVersionUID = -7937880449517409758L;
 	private String invokeResult = null;
+	private Collection<TestData> test;
 
 	public RtmpInvokeSampler() {
 	}
@@ -93,5 +97,11 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 		setVariableName(variableName);
 		setTimeOut(timeOut);
 		connect.sample(null);
+	}
+	public void setTest(Collection<TestData> test) {
+		this.test = test;
+	}
+	public Collection<TestData> getTest() {
+		return test;
 	}
 }

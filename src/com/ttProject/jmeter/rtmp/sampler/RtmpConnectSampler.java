@@ -156,11 +156,11 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 	}
 	@Override
 	public void threadStarted() {
-		// 
+		System.out.println("start Thread....");
 	}
 	@Override
 	public void threadFinished() {
-		// 
+		System.out.println("stop thread...");
 	}
 
 
