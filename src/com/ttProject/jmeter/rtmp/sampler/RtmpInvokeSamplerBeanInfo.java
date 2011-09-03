@@ -10,16 +10,21 @@ public class RtmpInvokeSamplerBeanInfo extends BeanInfoSupport {
 	public RtmpInvokeSamplerBeanInfo() {
 		super(RtmpInvokeSampler.class);
 		
-		createPropertyGroup("hogehoge", new String[]{"test"});
+		createPropertyGroup("test", new String[]{
+				"invokeFunc",
+				"parameters"});
 		
 		PropertyDescriptor p;
-		p = property("test");
-		p.setPropertyEditorClass(TableEditor.class);
-		p.setValue(TableEditor.CLASSNAME, "java.lang.String");
-		p.setValue(TableEditor.HEADERS, new String[]{"a", "b"});
-		p.setValue(TableEditor.OBJECT_PROPERTIES, new String[]{TestData.data1, TestData.data2});
+		p = property("invokeFunc");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, new ArrayList<Object>());
-		p.setValue(MULTILINE, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+
+		p = property("parameters");
+		p.setPropertyEditorClass(TableEditor.class);
+		p.setValue(TableEditor.CLASSNAME, TestData.class.getName());
+		p.setValue(TableEditor.HEADERS, new String[]{"param", "note"});
+		p.setValue(TableEditor.OBJECT_PROPERTIES, new String[]{"param", "note"});
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, new ArrayList<TestData>());
 	}
 }

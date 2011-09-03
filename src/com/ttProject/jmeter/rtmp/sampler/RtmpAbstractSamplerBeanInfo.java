@@ -8,7 +8,7 @@ public class RtmpAbstractSamplerBeanInfo extends BeanInfoSupport {
 	public RtmpAbstractSamplerBeanInfo() {
 		super(RtmpAbstractSampler.class);
 		
-		createPropertyGroup("testSetting", new String[]{"variableName"});
+		createPropertyGroup("BaseSetting", new String[]{"variableName"});
 
 		PropertyDescriptor p;
 		p = property("variableName");

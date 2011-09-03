@@ -13,7 +13,6 @@ import com.ttProject.junit.library.MethodChecker;
 public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements TestBean {
 	private static final long serialVersionUID = -2210763145979103988L;
 	private String methodName = null;
-	private String returnValue = null;
 	private String onInvokeResult = null;
 	/**
 	 * コンストラクタ
@@ -77,7 +76,7 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 			if(call.getServiceMethodName().equals(methodName)) {
 				t.interrupt();
 			}
-			return returnValue;
+			return null; // 応答する文字列が思い浮かばないのでとりあえずnullを返しておく。
 		}
 	}
 	/**
@@ -92,26 +91,13 @@ public class RtmpOnInvokeSampler extends RtmpTimeoutAbstractSampler implements T
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
-	/**
-	 * @return the returnValue
-	 */
-	public String getReturnValue() {
-		return returnValue;
-	}
-	/**
-	 * @param returnValue the returnValue to set
-	 */
-	public void setReturnValue(String returnValue) {
-		this.returnValue = returnValue;
-	}
 	
 	@SuppressWarnings("unused")
-	private RtmpOnInvokeSampler(String variableName, String timeOut, String methodName, String returnValue) throws Exception {
+	private RtmpOnInvokeSampler(String variableName, String timeOut, String methodName) throws Exception {
 		RtmpConnectSampler connect = (RtmpConnectSampler)new MethodChecker().getClassInstance(RtmpConnectSampler.class);
 		setVariableName(variableName);
 		setTimeOut(timeOut);
 		setMethodName(methodName);
-		setReturnValue(returnValue);
 		connect.sample(null);
 	}
 }

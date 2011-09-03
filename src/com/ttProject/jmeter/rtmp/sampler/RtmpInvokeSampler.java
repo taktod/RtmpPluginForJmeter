@@ -1,6 +1,6 @@
 package com.ttProject.jmeter.rtmp.sampler;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.samplers.Entry;
@@ -27,7 +27,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	/** シリアル番号 */
 	private static final long serialVersionUID = -7937880449517409758L;
 	private String invokeResult = null;
-	private Collection<TestData> test;
+	private List<TestData> params;
 
 	public RtmpInvokeSampler() {
 	}
@@ -50,7 +50,17 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 		InvokeEvent event = new InvokeEvent(Thread.currentThread());
 		RtmpClientEx rtmpClient = getRtmpData().getRtmpClient();
 		rtmpClient.setListener(event);
-		rtmpClient.invoke("testCall", new Object[]{"test", "hogehoge"}, event);
+		List<String> params = new ArrayList<String>();
+//		for(TestData data : params) {
+//			invokeResult += data.getParam() + ":" + data.getNote();
+//		}
+		for(int i = 1; i < 6; i ++) {
+			String param = getPropertyAsString("param" + i);
+			if(param != null && !param.equals("")) {
+				params.add(param);
+			}
+		}
+		rtmpClient.invoke(getPropertyAsString("invokeFunc"), params.toArray(), event);
 		try {
 			Thread.sleep(getTimeOutVal());
 			invokeResult = "invoke Timeout";
@@ -89,7 +99,37 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 			t.interrupt();
 		}
 	}
+	/**
+	 * @return the invokeFunc
+	 */
+	public String getInvokeFunc() {
+		return getPropertyAsString("invokeFunc");
+	}
+	/**
+	 * @param invokeFunc the invokeFunc to set
+	 */
+	public void setInvokeFunc(String invokeFunc) {
+		setProperty("invokeFunc", invokeFunc);
+	}
+	/**
+	 * @return the test
+	 */
+	public List<TestData> getParameters() {
+		System.out.println("getParameters is called...");
+		return params;
+	}
+	/**
+	 * @param test the test to set
+	 */
+	public void setParameters(List<TestData> params) {
+		System.out.println("setParameters is called....");
+		this.params = params;
+	}
 
+	
+	
+	
+	
 	@SuppressWarnings("unused")
 	@Init({"rtmp", "4000", "testCall"})
 	private RtmpInvokeSampler(String variableName, String timeOut, String methodName) throws Exception {
@@ -97,11 +137,5 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 		setVariableName(variableName);
 		setTimeOut(timeOut);
 		connect.sample(null);
-	}
-	public void setTest(Collection<TestData> test) {
-		this.test = test;
-	}
-	public Collection<TestData> getTest() {
-		return test;
 	}
 }
