@@ -3,8 +3,31 @@
 ## 概要
 JMeterによるRtmpサーバーへの接続動作を確認するためのプラグイン
 
-## 使い方(開発編)
+## 使い方(利用編)
+1. jakartaプロジェクトのjmeterをダウンロードして適当なところに解凍します。
+2. Red5をダウンロードして適当なところに解凍します。
+3. jmeterのディレクトリ/lib/extの中にこのプロジェクトのライブラリrtmpSampler.jarを設置します。
+4. Red5由来のライブラリも設定します。
+	<pre>red5.jar
+	bcprov-jdk16-145.jar
+	com.springsource.slf4j.api-1.6.1.jar
+	commons-beanutil-1..2.jar
+	ehcache-2.2.0.jar
+	log4j-over-slf4j-1.6.1.jar
+	logback-classic-0.9.26.jar
+	logback-core-0.9.26.jar
+	mina-core-2.0.3.jar
+	org.springframework.beans-3.0.5.RELEASE.jar
+	org.springframework.context-3.0.5.RELEASE.jar
+	org.springframework.core-3.0.5.RELEASE.jar
+	</pre>
+5. jmeterを起動する。
+6. 設定エレメントのRtmpConnectConfigを追加(ほかのSamplerとデータを共有するためのVariableNameとrtmpサーバー接続先を書き込む)
+7. サンプラーのRtmpConnectSampler(接続)RtmpDisconnectSampler(切断)RtmpOnInvokeSampler(命令の受け取り)RtmpInvokeSampler(命令実行)のサンプラーを適当に設置しておく。
 
+あとは適当な試行回数を設置して、サーバーの動作がどんな具合が確認すればOKです。
+
+## 使い方(開発編)
 * ライブラリを準備します。必要なものは以下
    * red5由来(同じものをjmeterのlib/extに設置が必須)
 	   <pre>red5.jar 1.0.0 (RC2dev推奨)
@@ -36,16 +59,17 @@ JMeterによるRtmpサーバーへの接続動作を確認するためのプラ�
 一応LGPLということにしておきます。なにか問題がでた場合は適宜変更する予定
 
 ## 履歴
-* 2011/08/27プログラムをリポジトリに登録してみた。
-* 2011/08/21プログラム作成開始
+* 2011/09/04 いろいろ手直ししてとりあえずな動作するようにした。バージョン0.1αとしたいと思います。
+* 2011/08/27 プログラムをリポジトリに登録してみた。
+* 2011/08/21 プログラム作成開始
 
 ## やることメモ
-* とりあえず、Rtmpで接続、切断、関数の呼び出し、関数の受け取り等を実行できるようにしておく。(関数の呼び出し条件の追加が必要。あとはできあがり。)
-* 試行スレッドグループを複数にして実行すると、どうやらRtmpDataCacheまわりが暴走するっぽい。まったく関係ないサーバーに接続しにいっているのに、動作がおかしくなる。
+* 試行スレッドグループを複数にして実行すると、どうやらRtmpDataCacheまわりが暴走するっぽい。まったく関係ないサーバーに接続しにいっているのに、動作がおかしくなる。(Jmeterの値の取り扱いがまだおかしいところがあるっぽい。)
 * 試行頻度があがりすぎると、動作がおかしくなる。２０スレッド以上たてると不具合が発生する？(Red5のバグと思われ)
 * Red5サーバーが相手だとこの状態でサーバー側の動作もおかしくなる。(Red5のバグと思われ)
 * 保持データが蒸発する不具合があるっぽいので(RtmpClientが次の動作に反映されない。)対処しておく。
-	どうやら動作途中に成功も失敗もしないエラーが発生しておわるっぽい。
+* どうやら動作途中に成功も失敗もしないエラーが発生しておわるっぽい。
+	<pre>
 	19:47:47.255 [?X???b?h?O???[?v 1-18] WARN  o.a.m.util.DefaultExceptionMonitor - Unexpected exception.
 java.lang.NullPointerException: null
 	at org.apache.mina.transport.socket.nio.NioSocketConnector.close(NioSocketConnector.java:218) ~[mina-core-2.0.3.jar:na]
@@ -108,7 +132,5 @@ Caused by: java.nio.channels.ClosedByInterruptException
 	at com.ttProject.jmeter.rtmp.library.RtmpClientEx.connect(RtmpClientEx.java:195)
 	at com.ttProject.jmeter.rtmp.library.RtmpClientEx.connect(RtmpClientEx.java:165)
 	at com.ttProject.jmeter.rtmp.sampler.RtmpConnectSampler.doConnect(RtmpConnectSampler.java:95)
-	... 4 more
-	
-* swfUrl pageUrl等きちんと動作させる。(済み)
+	... 4 more</pre>
 * GUIをなんとかする。
