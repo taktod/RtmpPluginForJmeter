@@ -1,4 +1,4 @@
-package com.ttProject.jmeter.rtmp;
+package com.ttProject.jmeter.rtmp.data;
 
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 

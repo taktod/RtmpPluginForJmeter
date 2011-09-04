@@ -13,7 +13,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-import com.ttProject.jmeter.rtmp.RtmpData;
+import com.ttProject.jmeter.rtmp.data.RtmpData;
 import com.ttProject.junit.annotation.Init;
 
 /**

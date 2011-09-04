@@ -11,6 +11,7 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCall;
 
+import com.ttProject.jmeter.rtmp.data.InvokeParameterData;
 import com.ttProject.jmeter.rtmp.library.IRtmpClientEx;
 import com.ttProject.jmeter.rtmp.library.RtmpClientEx;
 import com.ttProject.junit.annotation.Init;
@@ -27,7 +28,7 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	/** シリアル番号 */
 	private static final long serialVersionUID = -7937880449517409758L;
 	private String invokeResult = null;
-	private List<TestData> params;
+	private List<InvokeParameterData> params;
 
 	public RtmpInvokeSampler() {
 	}
@@ -114,14 +115,14 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 	/**
 	 * @return the test
 	 */
-	public List<TestData> getParameters() {
+	public List<InvokeParameterData> getParameters() {
 		System.out.println("getParameters is called...");
 		return params;
 	}
 	/**
 	 * @param test the test to set
 	 */
-	public void setParameters(List<TestData> params) {
+	public void setParameters(List<InvokeParameterData> params) {
 		System.out.println("setParameters is called....");
 		this.params = params;
 	}

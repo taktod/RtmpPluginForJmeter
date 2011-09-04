@@ -5,8 +5,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-import com.ttProject.jmeter.rtmp.RtmpData;
 import com.ttProject.jmeter.rtmp.config.RtmpConnectConfig;
+import com.ttProject.jmeter.rtmp.data.RtmpData;
 
 /**
  * 共通できる部分を抜き出したクラス
