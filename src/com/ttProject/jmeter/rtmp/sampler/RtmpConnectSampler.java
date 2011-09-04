@@ -99,7 +99,6 @@ public class RtmpConnectSampler extends RtmpTimeoutAbstractSampler implements Te
 		}
 		// 接続成功時はスレッドとrtmpClientを関係つけておき、次のサンプラーで利用できるようにしておく。
 		if("NetConnection.Connect.Success".equals(connectCode)) {
-			connectCode += ":" + getRtmpData().hashCode();
 			getRtmpData().setRtmpClient(rtmpClient);
 			return true;
 		}
