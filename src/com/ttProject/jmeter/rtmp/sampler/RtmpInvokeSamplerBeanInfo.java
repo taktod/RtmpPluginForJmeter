@@ -12,7 +12,8 @@ public class RtmpInvokeSamplerBeanInfo extends BeanInfoSupport {
 	public RtmpInvokeSamplerBeanInfo() {
 		super(RtmpInvokeSampler.class);
 		
-		createPropertyGroup("test", new String[]{
+		createPropertyGroup("Setting", new String[]{
+				"timeOut",
 				"invokeFunc",
 				"parameters"});
 		

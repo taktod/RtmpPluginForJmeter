@@ -8,7 +8,7 @@ public class RtmpTimeoutAbstractSamplerBeanInfo extends BeanInfoSupport {
 	public RtmpTimeoutAbstractSamplerBeanInfo() {
 		super(RtmpTimeoutAbstractSampler.class);
 		
-		createPropertyGroup("BaseSetting", new String[]{"variableName", "timeOut"});
+		createPropertyGroup("Setting", new String[]{"timeOut"});
 		PropertyDescriptor p;
 		p = property("timeOut");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);

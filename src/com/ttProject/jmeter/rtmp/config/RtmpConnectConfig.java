@@ -23,7 +23,7 @@ import com.ttProject.junit.annotation.Init;
 public class RtmpConnectConfig extends AbstractTestElement 
 	implements TestBean, ConfigElement, TestListener, NoThreadClone {
 	/** シリアルバージョンID */
-	private static final long serialVersionUID = -6893264509399917662L;
+	private static final long serialVersionUID = -1L;
 
 	/** 設定データ名 */
 	private String variableName = null;

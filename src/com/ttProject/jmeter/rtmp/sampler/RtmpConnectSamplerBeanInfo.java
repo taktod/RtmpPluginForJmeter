@@ -14,8 +14,9 @@ public class RtmpConnectSamplerBeanInfo extends BeanInfoSupport {
 	 */
 	public RtmpConnectSamplerBeanInfo() {
 		super(RtmpConnectSampler.class);
-		
-		createPropertyGroup("testSetting", new String[]{"perThread"});
+
+		// スレッドごとに動作させるか指定(でもこれってConfigにあるべきかもね。)
+		createPropertyGroup("Setting", new String[]{"timeOut", "perThread"});
 		PropertyDescriptor p;
 		p = property("perThread");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
