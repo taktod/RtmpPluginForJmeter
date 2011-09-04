@@ -52,13 +52,9 @@ public class RtmpInvokeSampler extends RtmpTimeoutAbstractSampler implements Tes
 		RtmpClientEx rtmpClient = getRtmpData().getRtmpClient();
 		rtmpClient.setListener(event);
 		List<String> params = new ArrayList<String>();
-//		for(TestData data : params) {
-//			invokeResult += data.getParam() + ":" + data.getNote();
-//		}
-		for(int i = 1; i < 6; i ++) {
-			String param = getPropertyAsString("param" + i);
-			if(param != null && !param.equals("")) {
-				params.add(param);
+		if(this.params != null) {
+			for(InvokeParameterData data : this.params) {
+				params.add(data.getParam());
 			}
 		}
 		rtmpClient.invoke(getPropertyAsString("invokeFunc"), params.toArray(), event);
